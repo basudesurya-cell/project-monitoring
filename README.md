@@ -83,13 +83,32 @@ uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 *API Swagger Documentation is available at `http://127.0.0.1:8000/docs`.*
 
-### Step 2: Frontend Installation & Launch
+### Step 2: Frontend Installation & Launch (Local Development)
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-*Dashboard will open at `http://localhost:5173/`.*
+*Dashboard will open at `http://localhost:5173/` (automatically proxies `/api` calls to `http://localhost:8000`).*
+
+### Step 3: Single-Port Production Deployment on Render (Frontend + Backend on 1 Port)
+You can deploy both the React frontend and FastAPI backend together as a **single Render Web Service on the same port** (Zero CORS, 1 free service):
+
+#### Option A: 1-Click Render Blueprint (Recommended)
+1. Push this repository to GitHub.
+2. Log in to [Render Dashboard](https://dashboard.render.com).
+3. Click **New +** > **Blueprint**.
+4. Connect this repository. Render will automatically read [`render.yaml`](file:///c:/Users/basud/OneDrive/Desktop/project-monitoring%20platform/render.yaml) and configure everything!
+
+#### Option B: Manual Web Service Setup
+1. On Render, click **New +** > **Web Service**.
+2. Connect your Git repository.
+3. Set the following fields:
+   - **Environment**: `Python 3`
+   - **Build Command**: `bash render-build.sh`
+   - **Start Command**: `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`
+   - **Health Check Path**: `/health`
+4. Click **Create Web Service**. Both React dashboard and FastAPI backend will run on your assigned Render URL!
 
 ---
 

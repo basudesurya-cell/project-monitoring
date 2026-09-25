@@ -305,9 +305,9 @@ def list_projects(
             query = query.filter(Project.risk_score >= 75.0)
 
     # Sorting
-    field_name = str(sort_by or "risk_score")
+    field_name = sort_by or "risk_score"
     sort_column = getattr(Project, field_name, Project.risk_score)
-    order_val = str(sort_order or "desc").lower()
+    order_val = (sort_order or "desc").lower()
     if order_val == "asc":
         query = query.order_by(sort_column.asc())
     else:
